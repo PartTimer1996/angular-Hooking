@@ -145,9 +145,6 @@ class JokeFormComponent{
                   class = "btn btn-danger"
                   (click) ="removeJoke()"> remove Jokes 
                   </button>
-
-  
-  
   `
 })
 
