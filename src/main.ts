@@ -1,4 +1,20 @@
-import { Component, NgModule, Input, EventEmitter, Output, ViewEncapsulation } from "@angular/core";
+import { 
+    Component, 
+    NgModule, 
+    Input, 
+    EventEmitter, 
+    Output, 
+    ViewEncapsulation, 
+    SimpleChanges, 
+    OnChanges,
+    OnInit,
+    DoCheck,
+    AfterContentInit,
+    AfterContentChecked,
+    AfterViewInit,
+    AfterViewChecked,
+    OnDestroy
+} from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
@@ -36,13 +52,63 @@ template: `
 </div>
 `
 })
-class JokeComponent { 
+class JokeComponent implements
+    OnChanges,
+    OnInit,
+    DoCheck,
+    AfterContentInit,
+    AfterContentChecked,
+    AfterViewInit,
+    AfterViewChecked,
+    OnDestroy { 
   @Input("joke") data: Joke;
+
+   constructor() {
+    console.log(`new - data is ${this.data}`);
+  }
+
+ngOnChanges(changes: SimpleChanges) {
+  console.log(`ngOnChanges - data is ${this.data}`);
+  for (let key in changes) {
+    console.log(`${key} changed.
+    Current: ${changes[key].currentValue}.
+    Previous: ${changes[key].previousValue}`);
+  }
 }
+
+  ngOnInit() {
+    console.log(`ngOnInit  - data is ${this.data}`);
+  }
+
+  ngDoCheck() {
+    console.log("ngDoCheck")
+  }
+
+  ngAfterContentInit() {
+    console.log("ngAfterContentInit");
+  }
+
+  ngAfterContentChecked() {
+    console.log("ngAfterContentChecked");
+  }
+
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit");
+  }
+
+  ngAfterViewChecked() {
+    console.log("ngAfterViewChecked");
+  }
+
+  ngOnDestroy() {
+    console.log("ngOnDestroy");
+  }
+
+    }
 
 @Component({
   selector: 'joke-form', 
-  templateUrl: 'joke-form-component.html',
+  template: '',
   styles: [
     `
    .card{
@@ -64,11 +130,25 @@ class JokeFormComponent{
 @Component({
   selector: 'joke-list',
   template:` 
-  <joke-form (jokeCreated)="addJoke($event)"></joke-form>
+  <!--<joke-form (jokeCreated)="addJoke($event)"></joke-form> -->
   <joke *ngFor = "let j of jokes" [joke] = "j">
   <span class = "setup">{{j.setup}}?</span>
   <h1 class = "punchline"> {{ j.punchline }}</h1> 
-  </joke>`
+  </joke>
+  
+  <button type = "button" 
+                  class = "btn btn-success"
+                  (click) ="addJoke()"> add Joke 
+                  </button>
+
+  <button type = "button" 
+                  class = "btn btn-danger"
+                  (click) ="removeJoke()"> remove Jokes 
+                  </button>
+
+  
+  
+  `
 })
 
 class JokeListComponent { 
@@ -76,15 +156,21 @@ class JokeListComponent {
 
   constructor(){ 
     this.jokes = [
-     new Joke("Test 1","Test 2"),
-     new Joke("Test 3","Test 4"),
-     new Joke("Test 5","Test 6")
+    //  new Joke("Test 1","Test 2"),
+    //  new Joke("Test 3","Test 4"),
+    //  new Joke("Test 5","Test 6")
     ]
 }
 
 addJoke(joke){
-  this.jokes.unshift(joke);
+  this.jokes.unshift(new Joke("Test","Test 1"));
 }
+
+removeJoke(){
+  this.jokes = [];
+
+}
+
 
 }
 
